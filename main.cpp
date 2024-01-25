@@ -24,32 +24,31 @@ public:
 
 } 
 // -------------------------------------------------------------------------------------------------                                    
-/* Open method creates connection to d-bus
- * For now we can have only one connection per script. May be I will expand it later.
- * Example usage in PHP:
- * $dbus = new Dbus;
- * $dbus->Open("DBUS_BUS_SESSION");
- * That's all.
-*/ 
-    Php::Value Dbus::Open(Php::Parameters &params) {
-    std::string type = params[0];
-    if (type=="G_BUS_TYPE_SESSION") {connection = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, NULL);return connection;}
-    if (type=="G_BUS_TYPE_SYSTEM") {connection = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, NULL);return connection;}
-    if (verbose) {g_printerr("\n [PHP-DBUS error] Unknown G_DBUS_TYPE.\n Correct usage is: $Dbus->Open('G_BUS_TYPE_SESSION') or $Dbus->Open('G_BUS_TYPE_SYSTEM')\n");}
-    else {g_printerr("Error: unknown G_DBUS_TYPE.\n");}
-    
-    return false;
+// Open method creates connection to d-bus
+// For now we can have only one connection per script. May be I will expand it later.
+// Example usage in PHP:
+// $dbus = new Dbus;
+// $dbus->Open("DBUS_BUS_SESSION");
+// That's all.
+
+  Php::Value Dbus::Open(Php::Parameters &params) {
+   std::string type = params[0];
+   if (type=="G_BUS_TYPE_SESSION") {connection = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, NULL);return connection;}
+   if (type=="G_BUS_TYPE_SYSTEM") {connection = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, NULL);return connection;}
+   if (verbose) {g_printerr("\n [PHP-DBUS error] Unknown G_DBUS_TYPE.\n Correct usage is: $Dbus->Open('G_BUS_TYPE_SESSION') or $Dbus->Open('G_BUS_TYPE_SYSTEM')\n");}
+   else {g_printerr("Error: unknown G_DBUS_TYPE.\n");}
+   return false;
 }
                                                    
-    void Dbus::Close(Php::Parameters &params) {
-    g_object_unref(connection);
+  void Dbus::Close(Php::Parameters &params) {
+   g_object_unref(connection);
                                                    }                                              
 
   Php::Value Dbus::Verbose(Php::Parameters &params) {
-  bool v = params[0];
-  if (v==true) {verbose = true;}
-  if (v==false) {verbose = false;}
-  return true;                         
+   bool v = params[0];
+   if (v==true) {verbose = true;}
+   if (v==false) {verbose = false;}
+   return true;                         
 } 
 
   
@@ -57,7 +56,7 @@ public:
 /*
  * CallMethod - calling some dbus method with some parameters
  * Currently supported parameters: single string, double string, single int, double int.
- * 
+ * Example usage: $dbus->CallMethod(":1.785","/StatusNotifierItem","org.kde.StatusNotifierItem","Activate","(ii)","0,0");
  */
    
   Php::Value Dbus::CallMethod(Php::Parameters &params) {
@@ -102,16 +101,16 @@ public:
                            
 }               
 // -------------------------------------------------------------------------------------------------                                    
-/* GetAll method usually returns all methods using by interface of path
- * This function returns STRING, not array, because PHP have more powerful tools to parse strings and arrays, than C.
- * Example usage in PHP:
- * $dbus = new Dbus;
- * $dbus->Open("DBUS_BUS_SESSION");
- * $x = $dbus->GetAll(":1.646","/StatusNotifierItem","org.freedesktop.DBus.Properties");
- * echo $x;
- * That's all.
-*/ 
- Php::Value Dbus::GetAll(Php::Parameters &params) {
+// GetAll method usually returns all methods using by interface of path
+// This function returns STRING, not array, because PHP have more powerful tools to parse strings and arrays, than C.
+// Example usage in PHP:
+// $dbus = new Dbus;
+// $dbus->Open("DBUS_BUS_SESSION");
+// $x = $dbus->GetAll(":1.646","/StatusNotifierItem","org.freedesktop.DBus.Properties");
+// echo $x;
+// That's all.
+
+  Php::Value Dbus::GetAll(Php::Parameters &params) {
    const char *bus = params[0];
    const char *object = params[1];
    const char *interface = params[2];
@@ -148,14 +147,14 @@ public:
     return y;
 } 
 // -------------------------------------------------------------------------------------------------
-/* ListNames method just returning all buses (services) registered in system\session
- * It returns simple digit-indexed array of strings.
- * Example usage in PHP:
- * $dbus = new Dbus;
- * $dbus->Open("DBUS_BUS_SESSION");
- * $x = $dbus->ListNames();
- * print_r($x);
-*/  
+// ListNames method just returning all buses (services) registered in system\session
+// It returns simple digit-indexed array of strings.
+// Example usage in PHP:
+// $dbus = new Dbus;
+// $dbus->Open("DBUS_BUS_SESSION");
+// $x = $dbus->ListNames();
+// print_r($x);
+
   Php::Value Dbus::ListNames(Php::Parameters &params) {
     GDBusProxy *proxy;
     GVariant *result;
