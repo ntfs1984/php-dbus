@@ -89,6 +89,9 @@ With "true" the same error will looks as:
 */
 $x = $d->Verbose(true); 
 
+// Setting timeout for 500 ms. By default Linux have dbus request timeout - 25 sec. By default php-dbus have timeout - 250 ms. But you can use any int value here, including -1 - unlimited.
+$x = $d->SetTimeout(500); 
+
 // Opening D-bus for work. Parameters are G_BUS_TYPE_SESSION or G_BUS_TYPE_SYSTEM
 $d->Open("G_BUS_TYPE_SESSION"); 
 
