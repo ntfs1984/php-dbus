@@ -5,52 +5,53 @@ This is PHP extension which allows to basic work with D-bus from PHP, without an
 
 Installation:
 
-##[PHP-CPP]
+## [PHP-CPP]
 
 If you don't have this library - you should install it. This library allows to create PHP extensions using C++, without any headache with Zend.
 Repository of it can be found here: https://github.com/CopernicaMarketingSoftware/PHP-CPP and official website is here: https://www.php-cpp.com/documentation/install
 
-_Step 1. Clone php-cpp repo_
+Step 1. **Clone php-cpp repo**
 ```bash
 git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
 ```
-_Step 2. Edit Makefile and replace correct path to php-config at PHP_CONFIG const if neccesary._
+Step 2. **Edit Makefile and replace correct path to php-config at PHP_CONFIG const if neccesary.**
 ```bash
 cd PHP-CPP
 nano Makefile
 ```
-_Step 3. Make_
+Step 3. **Make**
 ```bash
 make
 ```
 
-_Step 4. Install_
+Step 4. **Install**
 ```bash
 sudo make install
 ```
 
-##[PHP-DBUS]
+## [PHP-DBUS]
 
-It's this library.
+It's current library.
 
-_Step 1. Clone php-dbus repo_
+Step 1. **Clone php-dbus repo**
 ```bash
 git clone https://github.com/ntfs1984/php-dbus
 cd php-dbus
 ```
 
-_Step 2. Edit Makefile and replace correct paths to INI_DIR (not neccesary if you will add extension you your php.ini manually) and EXTENSION_DIR - where extension will be installed._
-(**Note**: you definitely must do this, because default path to php-config is set as my localhost)
+Step 2. **Edit Makefile and replace correct paths to INI_DIR (not neccesary if you will add extension you your php.ini manually), EXTENSION_DIR - where extension will be installed, and path to php-config**
+
+
 ```bash
 nano Makefile
 ```
 
-_Step 3. Make_
+Step 3. **Make**
 ```bash
 make
 ```
 
-_Step 4. Install_
+Step 4. **Install**
 
   a) You can use automated installation if you correctly set paths in Makefile
 ```bash
@@ -66,12 +67,12 @@ and add path to that extension to your using php.ini:
 echo "extension = /path/to/your/php-extensions-directory/php-dbus.so" >> /your/php.ini
 ```
 
-_Step 4. Check if your PHP loaded ths extension_
+Step 4. **Check if your PHP loaded ths extension**
 ```bash
 /path/to/your/php -i | grep dbus
 ```
 
-##[Usage]
+## [Usage]
 
 Features of this library will be improved time to time and I will create proper documentation, but for now:
 ```php
