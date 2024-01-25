@@ -8,11 +8,13 @@ class Dbus : public Php::Base {
 private:
 GDBusConnection *connection;
 bool verbose = false;
+int timeout = 250;
 public:
     void __construct();
     Php::Value Open(Php::Parameters &params);
     Php::Value Verbose(Php::Parameters &params);
     Php::Value CallMethod(Php::Parameters &params);
+    Php::Value SetTimeout(Php::Parameters &params);
     Php::Value ListNames(Php::Parameters &params);
     Php::Value GetProperty(Php::Parameters &params);
     Php::Value GetAll(Php::Parameters &params);
@@ -51,7 +53,10 @@ public:
    return true;                         
 } 
 
-  
+  Php::Value Dbus::SetTimeout(Php::Parameters &params) {
+   timeout = params[0];
+   return true;                         
+}  
   
 /*
  * CallMethod - calling some dbus method with some parameters
@@ -83,7 +88,7 @@ public:
                                  method,
                                  g_variant_new (par_type,par_value), /* GVariant *parameters */
                                  G_DBUS_CALL_FLAGS_NONE,
-                                 -1, /* gint timeout_msec */
+                                 timeout, /* gint timeout_msec */
                                  NULL, /* GCancellable */
                                  &error); /* GError ** */
     if (error != NULL) {
@@ -130,7 +135,7 @@ public:
                                  "GetAll",
                                  g_variant_new ("(s)",""), /* GVariant *parameters */
                                  G_DBUS_CALL_FLAGS_NONE,
-                                 -1, /* gint timeout_msec */
+                                 timeout, /* gint timeout_msec */
                                  NULL, /* GCancellable */
                                  &error); /* GError ** */
     if (error != NULL) {
@@ -176,7 +181,7 @@ public:
                                     "ListNames",
                                     NULL, /* GVariant *parameters */
                                     G_DBUS_CALL_FLAGS_NONE,
-                                    -1, /* gint timeout_msec */
+                                    timeout, /* gint timeout_msec */
                                     NULL, /* GCancellable */
                                     NULL); /* GError ** */
     if (error != NULL) {
@@ -210,6 +215,7 @@ extern "C" {
         dbus.method<&Dbus::Verbose>("Verbose");
         dbus.method<&Dbus::CallMethod>("CallMethod");
         dbus.method<&Dbus::GetAll>("GetAll");
+        dbus.method<&Dbus::SetTimeout>("SetTimeout");
         dbus.method<&Dbus::ListNames>("ListNames", { 
         Php::ByVal("change", Php::Type::Array, false) 
         });
