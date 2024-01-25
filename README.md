@@ -5,7 +5,7 @@ This is PHP extension which allows to basic work with D-bus from PHP, without an
 
 Installation:
 
-**[PHP-CPP]**
+##[PHP-CPP]
 
 If you don't have this library - you should install it. This library allows to create PHP extensions using C++, without any headache with Zend.
 Repository of it can be found here: https://github.com/CopernicaMarketingSoftware/PHP-CPP and official website is here: https://www.php-cpp.com/documentation/install
@@ -29,7 +29,7 @@ _Step 4. Install_
 sudo make install
 ```
 
-**[PHP-DBUS]**
+##[PHP-DBUS]
 
 It's this library.
 
@@ -71,7 +71,7 @@ _Step 4. Check if your PHP loaded ths extension_
 /path/to/your/php -i | grep dbus
 ```
 
-**[Usage]**
+##[Usage]
 
 Features of this library will be improved time to time and I will create proper documentation, but for now:
 ```php
