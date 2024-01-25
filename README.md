@@ -102,6 +102,9 @@ $x = $d->GetAll(":1.646","/StatusNotifierItem","org.freedesktop.DBus.Properties"
 
 echo $x;
 
+// Calling method Activate to :1.646 (still my Telegram)
+$x = $d->CallMethod(":1.646","/StatusNotifierItem","org.kde.StatusNotifierItem","Activate","(ii)","0,0"); 
+
 // Closing connection to free memory.
 $d->Close(); 
 ?>
