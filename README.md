@@ -1,7 +1,9 @@
 # php-dbus
 PHP D-bus binding - to create Linux applications using Linux d-bus interface
 
-This is PHP extension which allows to basic work with D-bus from PHP, without any external exec.
+This is PHP extension which allows to basic work with D-bus from PHP. 
+Unlike of another PHP dbus bindings, my version doesn't require any external exec's, doesn't call memory leaks, works pretty faster, and supports some new features like 
+setting timeout, verbose error reporting and many other useful.
 
 Installation:
 
