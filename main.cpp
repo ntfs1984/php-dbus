@@ -18,6 +18,7 @@ public:
     Php::Value CallMethod(Php::Parameters &params);
     Php::Value SetTimeout(Php::Parameters &params);
     Php::Value ListNames(Php::Parameters &params);
+    Php::Value ListProperties(Php::Parameters &params);
     Php::Value GetProperty(Php::Parameters &params);
     Php::Value GetAll(Php::Parameters &params);
     Php::Value ListServices(Php::Parameters &params);
@@ -97,23 +98,22 @@ public:
     return y;
                            
 }               
+
 // -------------------------------------------------------------------------------------------------  
-  Php::Value Dbus::GetProperty(Php::Parameters &params) {
-   return false; // This method is under construction - problems with filtering of property 
-   
-   /*
+  Php::Value Dbus::ListProperties(Php::Parameters &params) {
    const char *bus = params[0];
    const char *object = params[1];
    const char *interface = params[2];
-   const char *method = params[3];
+   Php::Value array;
+  // const char *method = params[3];
    //const char *par_type = params[4];
    //const char *par_value = params[5];
    GDBusProxy *proxy;
    gchar **property_names;
    guint n;
-   proxy = g_dbus_proxy_new_sync(connection,G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,NULL,bus,object,interface,NULL,NULL);
+   proxy = g_dbus_proxy_new_sync(connection,G_DBUS_PROXY_FLAGS_NONE,NULL,bus,object,interface,NULL,NULL);
+   // proxy = g_dbus_proxy_new_sync(connection,G_DBUS_PROXY_FLAGS_NONE,NULL,":1.1180","/StatusNotifierItem","org.kde.StatusNotifierItem",NULL,&error);
    property_names = g_dbus_proxy_get_cached_property_names (proxy);
-   std::map<std::string, std::string> myMap;
    for (n = 0; property_names != NULL && property_names[n] != NULL; n++)
     {
       const gchar *key = property_names[n];
@@ -121,16 +121,34 @@ public:
       gchar *value_str;
       value = g_dbus_proxy_get_cached_property (proxy, key);
       value_str = g_variant_print (value, TRUE);
-      g_print ("      %s -> %s\n", key, value_str);
-      myMap[key] = value_str;
+      array[key]=value_str;
       g_variant_unref (value);
       g_free (value_str);
     }
-return myMap;                         
-*/
+
+    
+   return array;                         
 }               
 
 
+// -------------------------------------------------------------------------------------------------  
+  Php::Value Dbus::GetProperty(Php::Parameters &params) {
+   const char *bus = params[0];
+   const char *object = params[1];
+   const char *interface = params[2];
+   const char *property = params[3];
+   //const char *par_type = params[4];
+   //const char *par_value = params[5];
+   GDBusProxy *proxy;
+   gchar *property_name;
+   GVariant *gv;
+   proxy = g_dbus_proxy_new_sync(connection,G_DBUS_PROXY_FLAGS_NONE,NULL,bus,object,interface,NULL,NULL);
+   gv = g_dbus_proxy_get_cached_property (proxy, property);
+   property_name = g_variant_print (gv, TRUE);
+   g_variant_unref(gv);
+   g_object_unref(proxy);
+   return property_name;
+}               
 // -------------------------------------------------------------------------------------------------                                    
 // GetAll method usually returns all methods using by interface of path
 // This function returns STRING, not array, because PHP have more powerful tools to parse strings and arrays, than C.
@@ -186,6 +204,8 @@ return myMap;
     if (error != NULL) {
     g_printerr("Error: %s\n", error->message);
     g_error_free(error);
+    g_variant_unref(result);
+    g_object_unref(proxy);
     return "Error";
 }
     GVariant *reply_child = g_variant_get_child_value(result, 0);
@@ -217,6 +237,9 @@ extern "C" {
         Php::ByVal("change", Php::Type::Array, false) 
         });
         dbus.method<&Dbus::GetProperty>("GetProperty", { 
+        Php::ByVal("change", Php::Type::Array, false) 
+        });
+        dbus.method<&Dbus::ListProperties>("ListProperties", { 
         Php::ByVal("change", Php::Type::Array, false) 
         });
         extension.add(std::move(dbus));
